@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Anta", sans-serif;
+
+}
+body {
+  cursor: url('visuals/cursor.png'),auto;
+}
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px #ffff33);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px #ffff33);
+  }
+}
+.yellow {
+    color: #ffff33;
+        animation: glow 2s infinite ease-in-out;
+}
+.pink{
+    color:#fc5df2;
+}
+.green{
+    color:#0afa7a;
+    font-weight:900;
+    filter: drop-shadow(0 0 10px #0afa7a);
+}
+.background{
+    width:100%;
+    height: 100vh;
+    background-image: url(visuals/leyre-71SHXwBLp5w-unsplash.jpg);
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6);
+    position:fixed;
+    z-index:-1;
+}
+/*HERO SECTION*/
+.herocont{
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-wrap:wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.herocont #herotext{
+    flex-basis: 50%;
+    color:#fff;
+    font-size:35px;
+    padding:30px 30px;
+}
+.herocont #herotext p{
+    display:block;
+    margin-top: 10px;
+}
+.herocont .weather{
+    aspect-ratio: 1/1;
+    border:2px solid #05c3f7;
+    height:60%;
+    margin-right: 160px;
+    background-color: rgba(5, 195, 247, 0.203);
+    color:#f2f0ef;
+    padding:20px 20px;
+    line-height: 2.3;
+}
+.herocont .weather h3{
+    font-size:30px;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNTHETIC IDENTITY_</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="background"></div>
+    <!--Hero Section-->
+    <div id="home">
+        <div class="herocont">
+            <div id="herotext">
+                <h1 id="greeting">Evening, Citizen....</h1>
+                <p>I am <span class="yellow">Abhishek Paul</span>, a computer engineering student and<br>a strategic thinker.<br>I use code to craft impactful,<br>full stack projects and solutions.</p>
+            </div>
+            <div class="weather">
+                <h2 style="font-size: 50px;" id="time">10:10</h2>
+                <h3>Location: <span class="yellow">Neo-Mumbai</span></h3>
+                <h3 id="temp">Temp: Loading.....</h3>
+                <h3 id="wind">Wind Speed: Loading.....</h3>
+                <h3>System Status <span class="green">ONLINE</span></h3>
+            </div>
+        </div>
+    </div>
+    <!--Scripts-->
+    <script>
+        const lat=18.9582;
+        const long=72.8321;
+        function updateWeather(){
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,wind_speed_10m`).then(response=>response.json()).then(data=>{
+                var temp=data.current.temperature_2m;
+                var wind=data.current.wind_speed_10m;
+                document.getElementById("temp").innerHTML=`Temp: <span class="yellow">${temp} °C</span>`
+                document.getElementById("wind").innerHTML=`Wind Speed: <span class="yellow">${wind} km/h</span>`
+            }).catch(error=>console.error(error));
+        }
+        function updateClock(){
+            var now=new Date();
+            var hour=now.getHours().toString().padStart(2,'0');
+            var minutes=now.getMinutes().toString().padStart(2,'0');
+            document.getElementById('time').textContent=`${hour}:${minutes}`;
+        }
+        function updateGreeting(){
+            var greeting=document.getElementById("greeting");
+            var now=new Date();
+            var hour=now.getHours();
+            var message="";
+            if (hour >= 5 && hour < 12){
+                message="Morning, Citizen";
+            }
+            else if (hour >= 12 && hour < 17){
+                message="Afternoon, Citizen";
+            }
+            else if (hour >= 17 && hour < 21){
+                message="Evening, Citizen.";
+            }
+            else{
+                message="Night, Citizen"
+            }
+            greeting.textContent=message;
+        }
+        updateGreeting();
+        updateWeather();
+        updateClock();
+        setInterval(updateGreeting,60*60*1000);
+        setInterval(updateWeather,30*60*1000);
+        setInterval(updateClock,1000);
+    </script>
+</body>
+</html>
