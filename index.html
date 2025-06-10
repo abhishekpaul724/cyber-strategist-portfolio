@@ -19,6 +19,7 @@
                 <h2 style="font-size: 50px;" id="time">10:10</h2>
                 <h3>Location: <span class="yellow">Neo-Mumbai</span></h3>
                 <h3 id="temp">Temp: Loading.....</h3>
+                <h3 id="wmo_code">Weather: Loading.....</h3>
                 <h3 id="wind">Wind Speed: Loading.....</h3>
                 <h3>System Status <span class="green">ONLINE</span></h3>
             </div>
@@ -28,12 +29,36 @@
     <script>
         const lat=18.9582;
         const long=72.8321;
+        const weatherCodeDescriptions = {
+            0: "Clear sky",
+            1: "Mainly clear",
+            2: "Partly cloudy",
+            3: "Overcast",
+            45: "Fog",
+            48: "Depositing rime fog",
+            51: "Light drizzle",
+            53: "Moderate drizzle",
+            55: "Dense drizzle",
+            61: "Light rain",
+            63: "Moderate rain",
+            65: "Heavy rain",
+            71: "Light snow",
+            73: "Moderate snow",
+            75: "Heavy snow",
+            80: "Showers",
+            95: "Thunderstorm",
+            99: "Thunderstorm with hail"
+        };
+
         function updateWeather(){
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,wind_speed_10m`).then(response=>response.json()).then(data=>{
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,wind_speed_10m,weather_code`).then(response=>response.json()).then(data=>{
                 var temp=data.current.temperature_2m;
                 var wind=data.current.wind_speed_10m;
-                document.getElementById("temp").innerHTML=`Temp: <span class="yellow">${temp} °C</span>`
-                document.getElementById("wind").innerHTML=`Wind Speed: <span class="yellow">${wind} km/h</span>`
+                var wmo_code=data.current.weather_code;
+                var weather=weatherCodeDescriptions[wmo_code] || "Unknown Weather";
+                document.getElementById("temp").innerHTML=`Temp: <span class="yellow">${temp} °C</span>`;
+                document.getElementById("wind").innerHTML=`Wind Speed: <span class="yellow">${wind} km/h</span>`;
+                document.getElementById("wmo_code").innerHTML=`Weather: <span class="yellow">${weather}</span>`;
             }).catch(error=>console.error(error));
         }
         function updateClock(){
@@ -41,30 +66,30 @@
             var hour=now.getHours().toString().padStart(2,'0');
             var minutes=now.getMinutes().toString().padStart(2,'0');
             document.getElementById('time').textContent=`${hour}:${minutes}`;
+            return hour;
         }
         function updateGreeting(){
             var greeting=document.getElementById("greeting");
-            var now=new Date();
-            var hour=now.getHours();
+            var hour=updateClock();
             var message="";
             if (hour >= 5 && hour < 12){
-                message="Morning, Citizen";
+                message="Morning, Citizen.";
             }
             else if (hour >= 12 && hour < 17){
-                message="Afternoon, Citizen";
+                message="Afternoon, Citizen.";
             }
             else if (hour >= 17 && hour < 21){
                 message="Evening, Citizen.";
             }
             else{
-                message="Night, Citizen"
+                message="Night, Citizen."
             }
             greeting.textContent=message;
         }
         updateGreeting();
         updateWeather();
         updateClock();
-        setInterval(updateGreeting,60*60*1000);
+        setInterval(updateGreeting,30*60*1000);
         setInterval(updateWeather,30*60*1000);
         setInterval(updateClock,1000);
     </script>
